@@ -12,8 +12,7 @@ with open(filename) as file:
 # Call function to create the extra columns for filter, and the locations list
 device_df, locations = func.create_columns(device_df)
 
-
-# Give menu of locations
+# Give menu of locations - remember zero index adjustment
 for i, location in enumerate(locations):
     print(f"{i + 1}. {location}")
 location_choice = int(input("Enter the number of the location: ")) - 1
@@ -24,21 +23,22 @@ print("2. Outdated OS")
 print("3. Outstanding Updates")
 print("4. Reboot Required")
 print("5. All Issues")
-issue_choice = int(input("Enter the number of the issue: ")) - 1
+issue_choice = int(input("Enter the number of the issue: "))
 
 device_location_filtered = device_df[
     device_df['site'].str.strip() == locations[location_choice]
 ]
 
-if issue_choice == 0:  # Unused
+if issue_choice == 1:  # Unused
     filtered = device_location_filtered[device_location_filtered['recent'] == False]
-elif issue_choice == 1:  # Outdated OS
+elif issue_choice == 2:  # Outdated OS
     filtered = device_location_filtered[device_location_filtered['current_os'] == False]
-elif issue_choice == 2:  # Outstanding Updates
+elif issue_choice == 3:  # Outstanding Updates
     filtered = device_location_filtered[device_location_filtered['outstanding_updates'] == True]
-elif issue_choice == 3:  # Reboot Required
+elif issue_choice == 4:  # Reboot Required
     filtered = device_location_filtered[device_location_filtered['reboot_required'] == True]
-elif issue_choice == 4:  # All Issues
+elif issue_choice == 5:  # All Issues
+    # Use "|" as OR to combine statements
     filtered = device_location_filtered[
         (device_location_filtered['recent'] == False) |
         (device_location_filtered['current_os'] == False) |

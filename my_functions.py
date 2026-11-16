@@ -52,10 +52,12 @@ def create_columns(device_df):
 
 
 def print_filtered_devices(filtered, location):
+    # Give blank line for readability
     print()
     print(f"Here are the devices for {location}")
 
     # Print header for the filtered devices
+    # Use :<20.xx for minimum width and max characters
     print(
         f"{'Hostname':<20} "
         f"{'Username':<20} "

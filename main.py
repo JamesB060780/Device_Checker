@@ -29,21 +29,21 @@ device_location_filtered = device_df[
     device_df['site'].str.strip() == locations[location_choice]
 ]
 
-if issue_choice == 1:  # Unused
-    filtered = device_location_filtered[device_location_filtered['recent'] == False]
+if issue_choice == 1:  # Unused - "~" is "not" operator for boolean
+    filtered = device_location_filtered[~device_location_filtered['recent']]
 elif issue_choice == 2:  # Outdated OS
-    filtered = device_location_filtered[device_location_filtered['current_os'] == False]
+    filtered = device_location_filtered[~device_location_filtered['current_os']]
 elif issue_choice == 3:  # Outstanding Updates
-    filtered = device_location_filtered[device_location_filtered['outstanding_updates'] == True]
+    filtered = device_location_filtered[device_location_filtered['outstanding_updates']]
 elif issue_choice == 4:  # Reboot Required
-    filtered = device_location_filtered[device_location_filtered['reboot_required'] == True]
+    filtered = device_location_filtered[device_location_filtered['reboot_required']]
 elif issue_choice == 5:  # All Issues
     # Use "|" as OR to combine statements
     filtered = device_location_filtered[
-        (device_location_filtered['recent'] == False) |
-        (device_location_filtered['current_os'] == False) |
-        (device_location_filtered['outstanding_updates'] == True) |
-        (device_location_filtered['reboot_required'] == True)
+        (~device_location_filtered['recent']) |
+        (~device_location_filtered['current_os']) |
+        (device_location_filtered['outstanding_updates']) |
+        (device_location_filtered['reboot_required'])
     ]
 else:
     filtered = pd.DataFrame()  # Empty dataframe for invalid choice

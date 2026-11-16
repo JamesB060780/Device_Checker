@@ -7,7 +7,7 @@ def create_columns(device_df):
     reboot_required = []
     locations = []
 
-    # Find cut off date
+    # Find cut off date - avoid calculating through loop for each device
     cutoff_date = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=30)
 
     for device in device_df.itertuples():

@@ -1,6 +1,5 @@
 # Imports
 import pandas as pd
-import datetime
 import my_functions as func
 
 # Get filename from user input

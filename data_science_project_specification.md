@@ -1,0 +1,1 @@
+# Checking and mapping PC requirements

@@ -26,7 +26,10 @@ print("4. Reboot Required")
 print("5. All Issues")
 issue_choice = int(input("Enter the number of the issue: ")) - 1
 
-device_location_filtered = device_df[device_df['site'].str.strip() == locations[location_choice]]
+device_location_filtered = device_df[
+    device_df['site'].str.strip() == locations[location_choice]
+]
+
 if issue_choice == 0:  # Unused
     filtered = device_location_filtered[device_location_filtered['recent'] == False]
 elif issue_choice == 1:  # Outdated OS
@@ -48,5 +51,5 @@ else:
 if filtered.empty:
     print("No devices found for the selected criteria.")
 else:
-    # Print the filtered devices 
+    # Print the filtered devices
     func.print_filtered_devices(filtered, locations[location_choice])

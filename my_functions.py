@@ -1,27 +1,29 @@
-import datetime
+from datetime import datetime, timedelta, timezone
+
 
 def create_columns(device_df):
     recent = []
-    current_OS = []
+    current_os = []
     outstanding_updates = []
     reboot_required = []
     locations = []
 
     # Find cut off date - avoid calculating through loop for each device
-    cutoff_date = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=30)
+    # Timezone-aware cutoff date for recent usage check without type error
+    cutoff_date = datetime.now(timezone.utc) - timedelta(days=30)
 
     for device in device_df.itertuples():
-    # Check for recent usage (30 days)
-        if datetime.datetime.fromisoformat(str(device.last_seen)) > cutoff_date:
+        # Check for recent usage (30 days)
+        if datetime.fromisoformat(str(device.last_seen)) > cutoff_date:
             recent.append(True)
         else:
             recent.append(False)
 
         # check for OS being current (windows 11 Pro)
         if "windows 11 pro" in str(device.operating_system).lower():
-            current_OS.append(True)
+            current_os.append(True)
         else:
-            current_OS.append(False)
+            current_os.append(False)
 
         # Check for Updates beyond Defender
         if int(str(device.pending_non_definition_unique_kb_count)) > 0:
@@ -41,12 +43,13 @@ def create_columns(device_df):
 
     # Add to the dataframe
     device_df['recent'] = recent
-    device_df['current_os'] = current_OS
+    device_df['current_os'] = current_os
     device_df['outstanding_updates'] = outstanding_updates
     device_df['reboot_required'] = reboot_required
 
     # Returns new dataframe with the locations
     return device_df, locations
+
 
 def print_filtered_devices(filtered, location):
     print()
@@ -63,13 +66,15 @@ def print_filtered_devices(filtered, location):
     )
 
     # Loop through the filtered devices and print their details
+    # Use "_" for the index since it's not needed in the loop
     for _, row in filtered.iterrows():
-          print(
-              f"{row['hostname']:<20} "
-              f"{row['username']:<20} "
-              f"{row['operating_system']:<20.14} "                      # Windows XX Pro
-              f"{str(row['pending_non_definition_unique_kb_count']):<20} "
-              f"{str(row['reboot_required']):<20} "
-              f"{row['last_seen']:<20.10}"                              # Limited to just the date part of the string
-            )
-        
+        print(
+            f"{row['hostname']:<20} "
+            f"{row['username']:<20} "
+            # Standard format for display (14 character limit)
+            f"{row['operating_system']:<20.14} "
+            f"{str(row['pending_non_definition_unique_kb_count']):<20} "
+            f"{str(row['reboot_required']):<20} "
+            # Limit the display of the last seen date to just the date part
+            f"{row['last_seen']:<20.10}"
+        )

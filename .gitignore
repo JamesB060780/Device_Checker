@@ -1,5 +1,6 @@
+# This file is purely to restrict what is uploaded
 # Exclude cache files
 __pycache__/
 
-# Exclude data file
+# Exclude data files
 *.csv
